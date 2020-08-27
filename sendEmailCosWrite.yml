@@ -17,7 +17,7 @@ packages:
           SUBJECT: 
                 default: test subject
           BODY: 
-                default: test body
+                default: test body 1\ntest body 2\ntest body 3
 
     triggers:
       cosWrite:
