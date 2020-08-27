@@ -1,0 +1,33 @@
+packages:
+  sendEmail:
+    version: 1.0
+    license: Apache-2.0
+    actions:
+      sendEmail:
+        version: 1.0
+        description: sendEmail with SL_USER, SL_APIKEY
+        docker: openwhisk/dockerskeleton
+        function: sendEmail.sh
+        inputs:
+          SL_USER: $SL_USER
+          SL_APIKEY: $SL_APIKEY
+          TO: $TO
+          FROM: 
+                default: no-reply@ibmfunctions.com
+          SUBJECT: 
+                default: test subject
+          BODY: 
+                default: test body
+
+    triggers:
+      cosWrite:
+        feed: /whisk.system/cos/changes
+        inputs:
+          bucket: $MY_BUCKET # The COS bucket must be regional and exist in the same location as the namespace
+          event_types: write # https://cloud.ibm.com/docs/openwhisk?topic=openwhisk-pkg_obstorage#pkg_obstorage_ev_ch_ref_trig
+
+    rules:
+      sendEmail-cosWrite:
+        description: Action is triggered by object-write operation
+        action: sendEmail
+        trigger: cosWrite
