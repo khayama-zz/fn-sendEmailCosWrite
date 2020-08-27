@@ -1,13 +1,13 @@
 packages:
-  sendEmail:
+  sendEmailCosWrite:
     version: 1.0
     license: Apache-2.0
     actions:
-      sendEmail:
+      sendEmailCosWrite:
         version: 1.0
-        description: sendEmail with SL_USER, SL_APIKEY
+        description: sendEmail with SL_USER, SL_APIKEY when cos object write
         docker: openwhisk/dockerskeleton
-        function: sendEmail.sh
+        function: sendEmailCosWrite.sh
         inputs:
           SL_USER: $SL_USER
           SL_APIKEY: $SL_APIKEY
@@ -29,5 +29,5 @@ packages:
     rules:
       sendEmail-cosWrite:
         description: Action is triggered by object-write operation
-        action: sendEmail
+        action: sendEmailCosWrite
         trigger: cosWrite
