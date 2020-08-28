@@ -24,8 +24,8 @@ ISOTIME="${YMD} ${HMS}"
 TZ=-9 date -d@"$(( `date -d "$ISOTIME" +%s`))" > /tmp/jst_time.txt
 JST_TIME=$(cat /tmp/jst_time.txt)
 
-SUBJECT=$($OBJECT_NAME is $EVENT_TYPE ed on your bucket)
-BODY=$(Region: $REGION\\nBucket: $BUCKET_NAME\\nObject: $OBJECT_NAME\\nSize: $SIZE byte\\nOperation: $EVENT_TYPE\\nTime: $JST_TIME)
+SUBJECT="${OBJECT_NAME} is ${EVENT_TYPE}d on your bucket"
+BODY="Region: ${REGION}\\nBucket: ${BUCKET_NAME}\\nObject: ${OBJECT_NAME}\\nSize: ${SIZE} byte\\nOperation: ${EVENT_TYPE}\\nTime: ${JST_TIME}"
 
 SENDGRID_ID=`curl -u "$SL_USER:$SL_APIKEY" -X GET 'https://api.softlayer.com/rest/v3.1/SoftLayer_Account/getNetworkMessageDeliveryAccounts.json?objectMask=mask[billingItem]' | jq -r '.[] | select (.billingItem.description=="Free Package") | .id'`
 
