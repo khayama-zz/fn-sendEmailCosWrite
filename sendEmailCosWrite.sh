@@ -33,7 +33,7 @@ curl -v -i -u "$SL_USER:$SL_APIKEY" \
 -X POST \
 -H "Content-Type: application/json" \
 -d @- "https://api.softlayer.com/rest/v3.1/SoftLayer_Network_Message_Delivery_Email_Sendgrid/$SENDGRID_ID/sendEmail" > /tmp/result.txt << EOS
-{"parameters": [{"body":"$BODY","from":"$FROM","to":"$TO","subject":"$SUBJECT"}]}
+{"parameters": [{"from":"$FROM","to":"$TO","subject":"$SUBJECT","body":"$BODY"}]}
 EOS
 
 if [ $? -ne 0 ]; then
