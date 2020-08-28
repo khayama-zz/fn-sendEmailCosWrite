@@ -18,8 +18,14 @@ EVENT_TYPE=$(echo $EVENT_TYPE | cut -d: -f2)
 
 SIZE=`echo "$ARGS" | jq -r '."notification"."object_length"'`
 
+UTC_TIME=`echo "$ARGS" | jq -r '."notification"."request_time"'`
+ymd=$(echo $time | cut -dT -f1) && hms=$(echo $time | cut -dT -f2 | cut -d. -f1)
+isotime="${ymd} ${hms}"
+TZ=-9 date -d@"$(( `date -d "$isotime" +%s`))" > /tmp/jst_time.txt
+JST_TIME=$(cat /tmp/jst_time.txt)
+
 SUBJECT=$($OBJECT_NAME is $EVENT_TYPE ed on your bucket)
-BODY=$(Region: $REGION\\nBucket: $BUCKET_NAME\\nObject: $OBJECT_NAME\\nSize: $SIZE byte\\nOperation: $EVENT_TYPE)
+BODY=$(Region: $REGION\\nBucket: $BUCKET_NAME\\nObject: $OBJECT_NAME\\nSize: $SIZE byte\\nOperation: $EVENT_TYPE\\nTIME: $JST_TIME)
 
 SENDGRID_ID=`curl -u "$SL_USER:$SL_APIKEY" -X GET 'https://api.softlayer.com/rest/v3.1/SoftLayer_Account/getNetworkMessageDeliveryAccounts.json?objectMask=mask[billingItem]' | jq -r '.[] | select (.billingItem.description=="Free Package") | .id'`
 
